@@ -1,0 +1,137 @@
+conky.config = {
+
+    -- General options
+    background = true,
+    temperature_unit = 'celsius',
+    double_buffer = true,
+    no_buffers = true,
+    text_buffer_size = 2048,
+
+    -- Polling speed
+    update_interval = 1,
+    cpu_avg_samples = 1,
+    net_avg_samples = 2,
+
+    -- Configure alignment
+    -- gap_x = border_inner_margin + border_outer_margin
+    -- gap_y = border_inner_margin + border_outer_margin (+ gnome toolbar height)
+    alignment = 'top_right',
+    gap_x = 50,
+    gap_y = 78,
+    maximum_width = 450,
+    minimum_height = 1600,
+
+    -- Spacing around the content in the window
+    border_inner_margin = 50,
+    border_outer_margin = 0,
+
+    -- Setup window type (eg. borderless)
+    own_window = true,
+    own_window_type = 'dock',
+    own_window_colour = '000000',
+    own_window_argb_visual = true,
+    own_window_argb_value = 0,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    own_window_argb_value = 0,
+    own_window_colour = '000000',
+
+    -- border draw settings
+    draw_shades = false,
+    draw_outline = false,
+    draw_borders = false,
+    draw_graph_borders = true,
+
+    -- Text font options
+    override_utf8_locale = true,
+    use_xft = true,
+    xftalpha = 1,
+    uppercase = false,
+
+    -- Defining colors
+    default_color = 'FFFFFF',
+    -- Shades of Gray
+    color1 = 'DDDDDD',
+    color2 = 'AAAAAA',
+    color3 = '888888',
+    -- Orange
+    color4 = 'EF5A29',
+    -- Green
+    color5 = '009933',
+
+    -- Network interface must have an ip address to be considered up
+    if_up_strictness = 'address',
+
+    -- Load the required lua scripts
+    lua_load ='~/.conky/launcher.lua',
+    lua_draw_hook_pre = 'main',
+
+};
+
+
+
+conky.text = [[
+# System information
+    ${offset 0}${font Ubuntu:bold:size=10}${color4}SYSTEM ${hr 2}
+    ${offset 15}${font Ubuntu:normal:size=10}${color1}$sysname $kernel
+    ${offset 15}${font Ubuntu:normal:size=10}${color1}$nodename
+    ${offset 15}${font Ubuntu:normal:size=10}${color1}Uptime: $uptime
+
+# Network usage
+${if_up wlp3s0}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}NETWORK
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Connection: Wireless (wlp3s0)
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Download: ${downspeedf wlp3s0} KiB/s
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Upload: ${upspeedf wlp3s0} KiB/s
+${else}
+${if_up enp4s0}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}NETWORK
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Connection: Wired (enp4s0)
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Download: ${downspeedf enp4s0} KiB/s
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Upload: ${upspeedf enp4s0} KiB/s
+${else}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}NETWORK
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}Connection: Not Connected
+${endif}${endif}
+
+# Showing CPU top 5
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}CPU
+    ${offset 30}${color2}Usage ${color0}${alignr}${cpu cpu0}%
+#    ${offset 30}${cpubar cpu0 5,}
+    ${offset 40}${font Ubuntu:normal:size=10}${color4}${top name 1}${alignr}${top cpu 1}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}${top name 2}${alignr}${top cpu 2}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color2}${top name 3}${alignr}${top cpu 3}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color3}${top name 4}${alignr}${top cpu 4}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color3}${top name 5}${alignr}${top cpu 5}%
+
+#GPU information
+    ${voffset 5}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}GPU
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}temperature:${color0}${alignr} ${execi 60 nvidia-settings -query GPUCoreTemp | perl -0777 -ne 'print /GPUCoreTemp.*?gpu.*?: (\d+)./ ? "$1C" : "GPU inactive";'}
+
+#Showing memory top 5
+    ${voffset 5}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}MEM
+    ${offset 30}${color2}RAM ${color0}${alignr}${mem}
+#    ${offset 30}${membar 5,}
+    ${offset 40}${font Ubuntu:normal:size=10}${color4}${top_mem name 1}${alignr}${top_mem mem 1}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color1}${top_mem name 2}${alignr}${top_mem mem 2}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color2}${top_mem name 3}${alignr}${top_mem mem 3}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color3}${top_mem name 4}${alignr}${top_mem mem 4}%
+    ${offset 40}${font Ubuntu:normal:size=10}${color3}${top_mem name 5}${alignr}${top_mem mem 5}%
+
+# Showing disk partitions: ubuntu root, windows root and data
+    ${voffset 5}
+    ${offset 20}${font Ubuntu:bold:size=10}${color5}DISKS
+    ${offset 40}${diskiograph 33,183 666666 666666}${voffset -30}
+    ${voffset 20}
+    ${offset 40}${font Ubuntu:normal:size=9}${color1}Ubuntu ${alignr}${font Ubuntu:normal:size=9}Used: ${font Ubuntu:normal:size=9}${fs_used /}/${fs_size /}
+    ${offset 40}${font Ubuntu:normal:size=9}${color1}Data ${alignr}${font Ubuntu:normal:size=9}Used: ${font Ubuntu:normal:size=9}${fs_used /home/polle/data}/${fs_size /home/polle/data}
+
+# Draw disk usage rings
+    ${voffset 5}
+    ${color1}${goto 100}${voffset 23}${fs_used_perc /}% ${goto 230}${fs_used_perc /home/polle/data}%
+    ${color5}${goto 100}Ubuntu ${goto 230}Data
+
+]];
+
+
