@@ -1,4 +1,4 @@
-# conky-special-bars
+# conky_special_bars
 This is an easily configurable lua script for adding special bars to your conky configuration. This is an adaptation of an original lua script by despot77. I updated the script to allow for vertical status bars and I added an easy way to add color gradients to those bars.
 
 The script for drawing these bars is `special_bars.lua`. Feel free to reuse and update it for your personal needs.
