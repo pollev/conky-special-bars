@@ -42,9 +42,11 @@ conky.config = {
     draw_graph_borders = true,
 
     -- Text font options
+    -- NOTE: Sections below that are in {font} tags will not properly work with transparancy
+    -- If you get transparancy issues, you might need to remote all font tags in the text section
     override_utf8_locale = true,
     use_xft = true,
-    xftalpha = 0.9,
+    xftalpha = 0.1,
     uppercase = false,
     font = 'Ubuntu:normal:size=10',
 
